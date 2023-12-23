@@ -1,4 +1,5 @@
 import scrapy
+from bookScraper.items import BookItem
 
 
 class BookspiderSpider(scrapy.Spider):
@@ -32,29 +33,28 @@ class BookspiderSpider(scrapy.Spider):
     def book_parse(self, response):
         table_rows = response.css("table.table.table-striped tr")
 
-        yield {
-            "url": response.url,
-            "title": response.xpath(
-                '//*[@id="content_inner"]/article/div[1]/div[2]/h1/text()'
-            )
-            .get()
-            .strip(),
-            "product_type": table_rows[1].css("td::text").get().strip(),
-            "price_excl_tax": table_rows[2].css("td::text").get().strip(),
-            "price_incl_tax": table_rows[3].css("td::text").get().strip(),
-            "tax": table_rows[4].css("td::text").get().strip(),
-            "availability": table_rows[5].css("td::text").get().strip(),
-            "num_reviews": table_rows[6].css("td::text").get().strip(),
-            "stars": response.css("p.star-rating").attrib["class"].strip(),
-            "category": response.xpath('//*[@id="default"]/div/div/ul/li[3]/a/text()')
-            .get()
-            .strip(),
-            "description": response.xpath('//*[@id="content_inner"]/article/p/text()')
-            .get()
-            .strip(),
-            "price": response.xpath(
-                '//*[@id="content_inner"]/article/div[1]/div[2]/p[1]/text()'
-            )
-            .get()
-            .strip(),
-        }
+        bookItem = BookItem()
+
+        bookItem["url"] = response.url
+        bookItem["title"] = response.xpath(
+            '//*[@id="content_inner"]/article/div[1]/div[2]/h1/text()'
+        ).get()
+        bookItem["upc"] = table_rows[0].css("td::text").get()
+        bookItem["product_type"] = table_rows[1].css("td::text").get()
+        bookItem["price_excl_tax"] = table_rows[2].css("td::text").get()
+        bookItem["price_incl_tax"] = table_rows[3].css("td::text").get()
+        bookItem["tax"] = table_rows[4].css("td::text").get()
+        bookItem["availability"] = table_rows[5].css("td::text").get()
+        bookItem["num_reviews"] = table_rows[6].css("td::text").get()
+        bookItem["stars"] = response.css("p.star-rating").attrib["class"]
+        bookItem["category"] = response.xpath(
+            '//*[@id="default"]/div/div/ul/li[3]/a/text()'
+        ).get()
+        bookItem["description"] = response.xpath(
+            '//*[@id="content_inner"]/article/p/text()'
+        ).get()
+        bookItem["price"] = response.xpath(
+            '//*[@id="content_inner"]/article/div[1]/div[2]/p[1]/text()'
+        ).get()
+
+        yield bookItem
