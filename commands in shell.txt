@@ -13,3 +13,7 @@ books[0].css('h3 > a').attrib['href']
 # To actually extract the textual data, you must call the selector .get() or .getall() methods
 
 books[0].css('h3 > a::text').get()
+
+
+# scrapy genspider spiderName url
+# scrapy crawl bookSpider -O file.json
