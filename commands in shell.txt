@@ -1,0 +1,15 @@
+fetch('url')
+
+# result of fetch is in response variable
+
+response.css('same as css selector!') 
+
+response.css('div.class1')
+response.css('div#id').get()
+
+books = response.css('article.product_pod')
+books[0].css('h3 > a').attrib['href']
+
+# To actually extract the textual data, you must call the selector .get() or .getall() methods
+
+books[0].css('h3 > a::text').get()
