@@ -6,6 +6,16 @@ class BookspiderSpider(scrapy.Spider):
     name = "bookSpider"
     allowed_domains = ["books.toscrape.com"]
     start_urls = ["https://books.toscrape.com/"]
+    
+    
+    # custom_settings = {
+    #     "FEEDS": {
+    #         "bookdata.json": {
+    #             "format": "json",
+    #             "overwrite": True
+    #         }
+    #     }
+    # } we can define settings here too (instead of settings file)
 
     def parse(self, response):
         books = response.css("article.product_pod")

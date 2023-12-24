@@ -15,5 +15,7 @@ books[0].css('h3 > a').attrib['href']
 books[0].css('h3 > a::text').get()
 
 
+# scrapy list -> list of project
 # scrapy genspider spiderName url
-# scrapy crawl bookSpider -O file.json
+# scrapy crawl bookSpider -O file.json -> write from beggining
+# scrapy crawl bookSpider -o file.json -> append to the file
