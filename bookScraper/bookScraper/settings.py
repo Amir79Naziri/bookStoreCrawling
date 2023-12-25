@@ -7,6 +7,10 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+import os
+from dotenv import load_dotenv, find_dotenv
+_ = load_dotenv(find_dotenv())
+
 BOT_NAME = "bookScraper"
 
 SPIDER_MODULES = ["bookScraper.spiders"]
@@ -23,8 +27,19 @@ FEEDS = {
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "bookScraper (+http://www.yourdomain.com)"
 
+
+SCRAPOPS_API_KEY = os.environ["SCRAPOPS_API_KEY"]
+
+SCRAPOPS_FAKE_USER_AGENT_URL = os.environ["SCRAPOPS_FAKE_USER_AGENT_URL"]
+SCRAPOPS_FAKE_USER_AGENT_ENABLED = True
+SCRAPOPS_FAKE_USER_AGENT_RESULTS_NUMBER = 10
+
+SCRAPOPS_FAKE_HEADERS_URL = os.environ["SCRAPOPS_FAKE_HEADERS_URL"]
+SCRAPOPS_FAKE_HEADERS_ENABLED = True
+SCRAPOPS_FAKE_HEADERS_RESULTS_NUMBER = 10
+
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -99,3 +114,11 @@ ITEM_PIPELINES = {
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+
+# DATABASE
+
+DB_HOSTNAME = os.environ["DB_HOSTNAME"]
+DB_USERNAME = os.environ["DB_USERNAME"]
+DB_PASSWORD = os.environ["DB_PASSWORD"]
+DB_DATABASE = os.environ["DB_DATABASE"]

@@ -1,13 +1,27 @@
 import scrapy
 from bookScraper.items import BookItem
+# from random import randint
 
 
 class BookspiderSpider(scrapy.Spider):
     name = "bookSpider"
     allowed_domains = ["books.toscrape.com"]
     start_urls = ["https://books.toscrape.com/"]
-    
-    
+
+    # user_agents_list = [
+    #     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537",
+    #     "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0",
+    #     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/603.2.4 (KHTML, like Gecko) Version/10.1.1 Safari/603.2.4",
+    #     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393",
+    #     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36",
+    #     "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko",
+    #     "Mozilla/5.0 (Windows NT 6.1; Win64; x64; Trident/7.0; rv:11.0) like Gecko",
+    #     "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)",
+    #     "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)",
+    #     "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)",
+    #     "Mozilla/5.0 (compatible; MSIE 10.0; Macintosh; Intel Mac OS X 10_7_3; Trident/6.0)",
+    # ]
+
     # custom_settings = {
     #     "FEEDS": {
     #         "bookdata.json": {
@@ -28,7 +42,20 @@ class BookspiderSpider(scrapy.Spider):
             else:
                 book_url = "https://books.toscrape.com/catalogue/" + book_page
 
-            yield response.follow(book_url, callback=self.book_parse)
+            # yield response.follow(
+            #     book_url,
+            #     callback=self.book_parse,
+            #     headers={
+            #         "User-Agent": self.user_agents_list[
+            #             randint(0, len(self.user_agents_list) - 1)
+            #         ]
+            #     },
+            # )
+            
+            yield response.follow(
+                book_url,
+                callback=self.book_parse,
+            )
 
         next_page = response.css("li.next a").attrib["href"]
 
@@ -38,7 +65,20 @@ class BookspiderSpider(scrapy.Spider):
             else:
                 next_page_url = "https://books.toscrape.com/catalogue/" + next_page
 
-            yield response.follow(next_page_url, callback=self.parse)
+            # yield response.follow(
+            #     next_page_url,
+            #     callback=self.parse,
+            #     headers={
+            #         "User-Agent": self.user_agents_list[
+            #             randint(0, len(self.user_agents_list) - 1)
+            #         ]
+            #     },
+            # )
+            
+            yield response.follow(
+                next_page_url,
+                callback=self.parse,
+            )
 
     def book_parse(self, response):
         table_rows = response.css("table.table.table-striped tr")

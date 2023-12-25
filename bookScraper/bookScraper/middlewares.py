@@ -101,3 +101,16 @@ class BookscraperDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
+
+
+from urllib.parse import urlparse
+import requests
+from random import randint
+
+class ScrapOpsFakeUserAgentMiddleware:
+    @classmethod
+    def from_crawler(cls, crawler):
+        
+        s = cls()
+        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
+        return s

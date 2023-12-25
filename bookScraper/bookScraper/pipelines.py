@@ -7,9 +7,6 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import psycopg2
-import os
-from dotenv import load_dotenv, find_dotenv
-_ = load_dotenv(find_dotenv()) # read local .env file
 
 
 class BookscraperPipeline:
@@ -70,11 +67,17 @@ class BookscraperPipeline:
 
 
 class SqlInjectionPipeline:
-    def __init__(self):
-        hostname = os.environ["db_hostname"]
-        username = os.environ["db_username"]
-        password = os.environ["db_password"]
-        database = os.environ["db_database"]
+
+    @classmethod # add this to access settings in __init__ function
+    def from_crawler(cls, crawler):
+        return cls(crawler.settings)
+    
+    
+    def __init__(self, settings):
+        hostname = settings.get("DB_HOSTNAME")
+        username = settings.get("DB_USERNAME")
+        password = settings.get("DB_PASSWORD")
+        database = settings.get("DB_DATABASE")
 
         ## Create/Connect to database
         self.conn = psycopg2.connect(
