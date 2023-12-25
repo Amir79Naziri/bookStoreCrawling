@@ -31,3 +31,8 @@ class BookItem(scrapy.Item):
     description = scrapy.Field()
     price = scrapy.Field()
     # price = scrapy.Field(serilizer=serilizer_price) first runs serilizer_price and then set it
+    
+    
+    def __repr__(self):
+        """only print title after exiting the Pipeline"""
+        return repr({"title": self["title"]})

@@ -103,14 +103,55 @@ class BookscraperDownloaderMiddleware:
         spider.logger.info("Spider opened: %s" % spider.name)
 
 
-from urllib.parse import urlparse
+from urllib.parse import urlencode
 import requests
 from random import randint
+from scrapy.http import Headers
 
-class ScrapOpsFakeUserAgentMiddleware:
+class ScrapOpsFakeHeadersMiddleware:
     @classmethod
     def from_crawler(cls, crawler):
-        
-        s = cls()
-        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
-        return s
+        return cls(crawler.settings)
+
+    def __init__(self, settings):
+        self.api_key = settings.get("SCRAPOPS_API_KEY")
+        self.url = settings.get("SCRAPOPS_FAKE_HEADERS_URL")
+        self.enabled = settings.get("SCRAPOPS_FAKE_HEADERS_ENABLED")
+        self.num_results = settings.get("SCRAPOPS_FAKE_HEADERS_RESULTS_NUMBER")
+        self.fake_headers_list = self.retieve_fake_headers()
+
+    def retieve_fake_headers(self):
+        params = {
+            "api_key": self.api_key,
+            "num_results": self.num_results if self.num_results else 1,
+        }
+
+        response = requests.get(url=self.url, params=urlencode(params))
+
+        results = response.json()
+
+        return results.get("result", [])
+
+    def process_request(self, request, spider):
+        if self.enabled:
+            fake_headers = self.fake_headers_list[
+                randint(0, (self.num_results if self.num_results else 1) - 1)
+            ]
+            
+            request.headers = Headers(fake_headers)
+
+            # request.headers["upgrade-insecure-requests"] = fake_headers[
+            #     "upgrade-insecure-requests"
+            # ]
+            # request.headers["user-agent"] = fake_headers["user-agent"]
+            # request.headers["accept"] = fake_headers["accept"]
+            # request.headers["sec-ch-ua"] = fake_headers["sec-ch-ua"]
+            # request.headers["sec-ch-ua-mobile"] = fake_headers["sec-ch-ua-mobile"]
+            # request.headers["sec-ch-ua-platform"] = fake_headers["sec-ch-ua-platform"]
+            # request.headers["sec-fetch-site"] = fake_headers["sec-fetch-site"]
+            # request.headers["sec-fetch-mod"] = fake_headers["sec-fetch-mod"]
+            # request.headers["sec-fetch-user"] = fake_headers["sec-fetch-user"]
+            # request.headers["accept-encoding"] = fake_headers["accept-encoding"]
+            # request.headers["accept-language"] = fake_headers["accept-language"]
+
+            print('******* New Headers Attached! *******')

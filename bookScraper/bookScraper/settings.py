@@ -29,14 +29,9 @@ FEEDS = {
 
 
 SCRAPOPS_API_KEY = os.environ["SCRAPOPS_API_KEY"]
-
-SCRAPOPS_FAKE_USER_AGENT_URL = os.environ["SCRAPOPS_FAKE_USER_AGENT_URL"]
-SCRAPOPS_FAKE_USER_AGENT_ENABLED = True
-SCRAPOPS_FAKE_USER_AGENT_RESULTS_NUMBER = 10
-
 SCRAPOPS_FAKE_HEADERS_URL = os.environ["SCRAPOPS_FAKE_HEADERS_URL"]
 SCRAPOPS_FAKE_HEADERS_ENABLED = True
-SCRAPOPS_FAKE_HEADERS_RESULTS_NUMBER = 10
+SCRAPOPS_FAKE_HEADERS_RESULTS_NUMBER = 50
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -72,9 +67,11 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    "bookScraper.middlewares.BookscraperDownloaderMiddleware": 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   # "bookScraper.middlewares.BookscraperDownloaderMiddleware": 543,
+   "bookScraper.middlewares.ScrapOpsFakeHeadersMiddleware": 400,
+
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -86,7 +83,7 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    "bookScraper.pipelines.BookscraperPipeline": 300,
-   "bookScraper.pipelines.SqlInjectionPipeline": 400,
+   # "bookScraper.pipelines.SqlInjectionPipeline": 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
