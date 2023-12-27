@@ -19,7 +19,7 @@ To run the web crawler, you need to run the below command:
 scrapy crawl bookSpider
 ```
 
-Also, you need to add your database credentials () in a `.env` file.
+Also, you need to add your database credentials in a `.env` file.
 
 ```
 DB_HOSTNAME=postgres-hostname
