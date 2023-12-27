@@ -1,6 +1,6 @@
 # Book Store Web Crawling
 
-This project is a web crawler that scrapes data from a book store website and saves it in a JSON and Postgres table. The web crawler can extract information such as book title, price, rating, and availability.
+This project is a web crawler that scrapes data from a [book store](https://books.toscrape.com/) and saves it in a JSON and Postgres table. The web crawler can extract information such as book title, price, rating, and availability.
 
 ### Installation
 To run this project, you need to have Python 3 and pip installed on your system. You also need to install the following framework:
