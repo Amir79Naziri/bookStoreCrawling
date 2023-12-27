@@ -1,4 +1,5 @@
 import scrapy
+from scrapy.http import Request
 from bookScraper.items import BookItem
 # from random import randint
 
@@ -30,6 +31,10 @@ class BookspiderSpider(scrapy.Spider):
     #         }
     #     }
     # } we can define settings here too (instead of settings file)
+    
+    # def start_requests(self):
+    #     return super().start_requests()
+    #  or yield scrapy.Request(self.start_urls[0], callback=self.parse)
 
     def parse(self, response):
         books = response.css("article.product_pod")
